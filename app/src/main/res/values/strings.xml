@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">EcoRecicla</string>
+    <string name="login">Iniciar Sesion</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="tipoProductoMensaje">Selecciona el tipo de producto</string>
+    <string name="cantidad">Cantidad</string>
+    <string name="registradProducto">Registrar</string>
+    <string name="registroUsuario">Registro</string>
+    <string name="nombre">Nombre</string>
+    <string name="telefono">Telefono</string>
+    <string name="confirmPassword">Confirmar Password</string>
+
+
 </resources>
