@@ -1,14 +1,16 @@
-package com.example.ecorecicla;
+package com.example.ecorecicla.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class ProfileView extends AppCompatActivity {
+import com.example.ecorecicla.R;
+
+public class StadisticsView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_view);
+        setContentView(R.layout.activity_stadistics_view);
     }
 }

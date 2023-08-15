@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterView">
+    tools:context=".Views.RegisterView">
     <LinearLayout
         android:layout_width="409dp"
         android:layout_height="729dp"
@@ -23,9 +23,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
+            android:paddingTop="10dp"
             >
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginVertical="16dp"
+                android:layout_marginVertical="0dp"
                 android:id="@+id/nameEditText"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -35,6 +36,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/txNombre"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -43,15 +45,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/telefono"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"/>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailEditText"
                 android:layout_width="300dp"
@@ -63,6 +57,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
+                    android:id="@+id/txEmail"
+
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -77,11 +73,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
+                    android:id="@+id/txPassword"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ConfirmPasswordText"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/confirmPassword"
@@ -91,6 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
+                    android:id="@+id/txConfirmPassword"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>

@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.ecorecicla.Views.LoginView;
+
+public class StartApp extends AppCompatActivity {
 
     /****** Create Thread that will sleep for 5 seconds****/
     Thread background = new Thread() {

@@ -44,7 +44,21 @@
             android:orientation="vertical"
             android:gravity="center_horizontal"
             >
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectDate"
+                android:layout_marginTop="10dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/tipoMes">
 
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/selectProduct"
                 android:layout_marginVertical="20dp"
@@ -61,7 +75,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordText"
+                android:id="@+id/quantity"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/cantidad"
