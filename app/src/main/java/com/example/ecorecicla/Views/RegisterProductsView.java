@@ -3,13 +3,20 @@ package com.example.ecorecicla.Views;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Toast;
 
 
@@ -18,19 +25,21 @@ import com.example.ecorecicla.Models.EstadisticaModel;
 import com.example.ecorecicla.Models.ProductoReciclajeModel;
 import com.example.ecorecicla.R;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Calendar;
 
 public class RegisterProductsView extends AppCompatActivity {
     private ArrayList<TypeProductsConstants> tipoProductos;
-    private ArrayList<String> arrMeses;
-    private TextInputLayout selectProducto,selectMes,txtCantidad;
-    private ArrayAdapter listProductos,listMeses;
+    private TextInputEditText selectDate,txtCantidad;
+
+    private AutoCompleteTextView selectProducto;
+    private ArrayAdapter listProductos;
 
     private ProductoReciclajeModel productoReciclajeModel;
 
@@ -43,24 +52,68 @@ public class RegisterProductsView extends AppCompatActivity {
 
     private File file;
 
+     final Calendar c  = Calendar.getInstance();
+
+    private int year ;
+    private int month ;
+    private int day ;
+
+    private LocalDate localDate;
+
+    private int positionItem;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_products_view);
         inicializar();
-        ((AutoCompleteTextView) selectProducto.getEditText()).setAdapter(listProductos);
-        ((AutoCompleteTextView) selectMes.getEditText()).setAdapter(listMeses);
+        validateBtn();
+
+        selectDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDatePicker();
+                validateBtn();
+            }
+        });
+        selectProducto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                positionItem = position;
+                validateBtn();
+            }
+        });
+
         estadisticaModel = new EstadisticaModel(0);
+
+
+        txtCantidad.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validateBtn();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
 
 
         btnRegistrarProducto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mes = selectMes.getEditText().getText().toString();
-                String producto =  selectProducto.getEditText().getText().toString();
-                Double cantidad = Double.parseDouble(txtCantidad.getEditText().getText().toString());
-               // productoReciclajeModel = new ProductoReciclajeModel(producto,cantidad,mes);
-
+                Double cantidad = Double.parseDouble(txtCantidad.getText().toString());
+                productoReciclajeModel = new ProductoReciclajeModel(TypeProductsConstants.values()[positionItem],cantidad, localDate);
 
 
                 estadisticaModel.setArrProductosReciclados(productoReciclajeModel);
@@ -98,8 +151,12 @@ public class RegisterProductsView extends AppCompatActivity {
     }
 
     private void inicializar(){
+        year =  c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+
         selectProducto = findViewById(R.id.selectProduct);
-        selectMes = findViewById(R.id.selectDate);
+        selectDate = findViewById(R.id.selectDate);
         txtCantidad = findViewById(R.id.quantity);
         btnRegistrarProducto = findViewById(R.id.btnRegistrarProducto);
         bottomAppBar = findViewById(R.id.bottomAppBar);
@@ -107,16 +164,55 @@ public class RegisterProductsView extends AppCompatActivity {
         tipoProductos = new ArrayList<>();
         tipoProductos.addAll(Arrays.asList(TypeProductsConstants.values()));
 
-        arrMeses = new ArrayList<String>();
-        String[] stringsArrayMeses = {"Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
-        arrMeses.addAll(Arrays.asList(stringsArrayMeses));
 
         listProductos = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,tipoProductos);
         listProductos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        listMeses = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,arrMeses);
-        listMeses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectProducto.setAdapter(listProductos);
 
 
+    }
+
+    public void setDate(LocalDate df,int year,int month,int day){
+        this.localDate = df;
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+
+    public void validateBtn(){
+        Boolean emptyDate = selectDate.getText().toString().isEmpty();
+        Boolean emptyCantidad = txtCantidad.getText().toString().isEmpty();
+        Boolean emptyProducto = selectProducto.getText().toString().isEmpty();
+        Boolean lessCantidadToZero = emptyCantidad ? true : Double.parseDouble(txtCantidad.getText().toString()) < 1;
+
+
+
+        if(emptyDate || emptyCantidad || emptyProducto || lessCantidadToZero){
+            btnRegistrarProducto.setEnabled(false);
+
+        }else{
+            btnRegistrarProducto.setEnabled(true);
+        }
+    }
+
+    private void openDatePicker(){
+
+
+        DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                LocalDate df = LocalDate.of(year,month,dayOfMonth);
+
+                setDate(df,year,month,dayOfMonth);
+
+                LocalDate dfText = LocalDate.of(year,month+1,dayOfMonth);
+
+                selectDate.setText(dfText.toString());
+                validateBtn();
+            }
+        }, year, month, day);
+
+        dialog.show();
     }
 }
