@@ -13,28 +13,28 @@
         android:theme="@style/Theme.EcoRecicla"
         tools:targetApi="31">
         <activity
-            android:name=".NewsViews"
+            android:name=".Views.NewsViews"
             android:exported="false" />
         <activity
-            android:name=".ProfileView"
+            android:name=".Views.ProfileView"
             android:exported="false" />
         <activity
-            android:name=".RegisterProductsView"
+            android:name=".Views.RegisterProductsView"
             android:exported="false" />
         <activity
-            android:name=".StadisticsView"
+            android:name=".Views.StadisticsView"
             android:exported="false" />
         <activity
-            android:name=".MainView"
+            android:name=".Views.MainView"
             android:exported="false" />
         <activity
-            android:name=".RegisterView"
+            android:name=".Views.RegisterView"
             android:exported="false" />
         <activity
-            android:name=".LoginView"
+            android:name=".Views.LoginView"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".StartApp"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

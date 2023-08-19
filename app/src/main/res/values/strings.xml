@@ -4,6 +4,8 @@
     <string name="email">email</string>
     <string name="password">password</string>
     <string name="tipoProductoMensaje">Selecciona el tipo de producto</string>
+    <string name="tipoMes">Selecciona el mes</string>
+
     <string name="cantidad">Cantidad</string>
     <string name="registradProducto">Registrar</string>
     <string name="registroUsuario">Registro</string>

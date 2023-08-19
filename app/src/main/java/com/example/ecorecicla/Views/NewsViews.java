@@ -1,37 +1,31 @@
-package com.example.ecorecicla;
+package com.example.ecorecicla.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
+import com.example.ecorecicla.R;
 import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MainView extends AppCompatActivity {
-    private FloatingActionButton addProduct;
+public class NewsViews extends AppCompatActivity {
+
     private BottomAppBar bottomAppBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal_view);
-        addProduct = findViewById(R.id.addProduct);
+        setContentView(R.layout.activity_news_views);
         bottomAppBar = findViewById(R.id.bottomAppBar);
-
         bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent pageNews = new Intent(getApplicationContext(),NewsViews.class);
-                startActivity(pageNews);
+                //keep this position
             }
         });
-
         bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -43,17 +37,6 @@ public class MainView extends AppCompatActivity {
                 }else{
                     return false;
                 }
-            }
-        });
-
-
-
-
-        addProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent registrarProducto = new Intent(getApplicationContext(), RegisterProductsView.class);
-                startActivity(registrarProducto);
             }
         });
     }

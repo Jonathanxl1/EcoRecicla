@@ -1,4 +1,4 @@
-package com.example.ecorecicla;
+package com.example.ecorecicla.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.ecorecicla.R;
 
 public class LoginView extends AppCompatActivity {
 
