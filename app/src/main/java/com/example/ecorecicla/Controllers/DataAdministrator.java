@@ -15,6 +15,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 
 public class DataAdministrator {
     final private String USUARIOS_FILE = "Usuarios.json";
@@ -24,7 +25,9 @@ public class DataAdministrator {
     private UsuarioModel userModel;
     private EstadisticaModel estadisticaModel;
 
-    public DataAdministrator(UsuarioModel userModel,Context context) {
+
+
+    public DataAdministrator(UsuarioModel userModel, Context context) {
         this.file = new File(context.getFilesDir(),USUARIOS_FILE);
         this.userModel = userModel;
     }
@@ -120,6 +123,28 @@ public class DataAdministrator {
         }
 
         return true;
+
+    }
+
+
+    public Boolean validateLoginUser(String email,String password){
+        try {
+            JSONArray jsonArray = readData();
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.optJSONObject(i);
+                if (jsonObject != null &&
+                        jsonObject.has("email") && jsonObject.has("password") &&
+                        jsonObject.getString("email").equals(email) && jsonObject.getString("password").equals(password)) {
+                    return true;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+
 
     }
 
