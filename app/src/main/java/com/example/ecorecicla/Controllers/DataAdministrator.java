@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.ecorecicla.Models.EstadisticaModel;
+import com.example.ecorecicla.Models.ProductoReciclajeModel;
 import com.example.ecorecicla.Models.UsuarioModel;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,9 +15,11 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class DataAdministrator {
     final private String USUARIOS_FILE = "Usuarios.json";
@@ -25,11 +29,19 @@ public class DataAdministrator {
     private UsuarioModel userModel;
     private EstadisticaModel estadisticaModel;
 
+    private Gson gson;
+
 
 
     public DataAdministrator(UsuarioModel userModel, Context context) {
         this.file = new File(context.getFilesDir(),USUARIOS_FILE);
         this.userModel = userModel;
+    }
+
+    public DataAdministrator(EstadisticaModel estadisticaModel,Context context){
+        this.file = new File(context.getFilesDir(),ESTADISTICAS_FILE);
+        this.estadisticaModel = estadisticaModel;
+        gson = new Gson();
     }
 
 
@@ -146,6 +158,76 @@ public class DataAdministrator {
         return false;
 
 
+    }
+
+    public void createEstadisticaModel(){
+        try{
+            if(!existFile()) {
+                createFile();
+            }
+            JSONArray jsonArray = readData();
+            String stringData = jsonArray.toString();
+            String prevData = stringData.substring(1,stringData.length()-1);
+
+            BufferedWriter bufferedWriter = writeOnFile();
+            String estadisticaModelJson = gson.toJson(estadisticaModel);
+            if(!prevData.isEmpty()){
+                bufferedWriter.write("["+prevData+","+estadisticaModelJson+"]");
+            }else{
+                bufferedWriter.write("["+estadisticaModelJson+"]");
+            }
+            bufferedWriter.close();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+    public void saveProductModel(ProductoReciclajeModel productoReciclajeModel,int userIdRef){
+        try{
+            ArrayList<JSONObject> arrayItems = gson.fromJson(new FileReader(file.getAbsoluteFile()),ArrayList.class);
+            JSONObject jsonItem = new JSONObject();
+            Integer position = -1;
+            for(int i=0; i < arrayItems.size();i++){
+                jsonItem = arrayItems.get(i);
+               if(jsonItem != null && jsonItem.has("userIdRef") && jsonItem.getInt("userIdRef") == userIdRef){
+                   position = i;
+                   JSONArray jsonArray = jsonItem.getJSONArray("arrProductosReciclados");
+                   jsonArray.put(gson.toJson(productoReciclajeModel));
+                   jsonItem.put("arrProductosReciclados",jsonArray);
+               }
+            }
+            if(position > -1){
+                arrayItems.add(position,jsonItem);
+            }
+            BufferedWriter bufferedWriter = writeOnFile();
+            bufferedWriter.write(gson.toJson(arrayItems));
+            bufferedWriter.close();
+
+
+           /* JSONArray jsonArray = readData();
+            JSONObject jsonObject = new JSONObject();
+            if(jsonArray != null){
+                for (int i=0; i < jsonArray.length();i++){
+                    JSONObject jsonObjectTemp = jsonArray.getJSONObject(i);
+                    if(jsonObjectTemp != null && jsonObjectTemp.has("userIdRef") && jsonObjectTemp.getInt("userIdRef") == userIdRef){
+                        jsonObject = jsonObjectTemp;
+                    }
+                }
+            }
+            ArrayList<ProductoReciclajeModel> productosReciclados = (ArrayList) jsonObject.get("arrProductosReciclados");
+            productosReciclados.add(productoReciclajeModel);
+            BufferedWriter bufferedWriter = writeOnFile();*/
+
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }catch (JSONException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
 }
