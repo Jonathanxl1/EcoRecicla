@@ -36,6 +36,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/emailUser"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -50,12 +51,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
+                    android:id="@+id/passwordUser"
+                    android:drawableRight="@drawable/arrow_back"
+
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
             <LinearLayout
                 android:layout_width="200dp"
-                android:layout_marginVertical="40dp"
+                android:layout_marginVertical="20dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
@@ -63,7 +67,7 @@
                 <Button
                     android:id="@+id/btnLogin"
                     android:layout_width="200dp"
-                    android:layout_height="40dp"
+                    android:layout_height="60dp"
                     android:text="@string/login"
                     >
 
@@ -80,7 +84,7 @@
             <Button
                 android:id="@+id/registroUsers"
                 android:layout_width="200dp"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:text="@string/registroUsuario"
                 />
 

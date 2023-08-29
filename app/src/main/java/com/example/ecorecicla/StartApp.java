@@ -13,7 +13,7 @@ public class StartApp extends AppCompatActivity {
     Thread background = new Thread() {
         public void run() {
             try {
-                // Thread will sleep for 5 seconds
+                // Thread will sleep for 3 seconds
                 sleep(1*3000);
 
                 // After 5 seconds redirect to another intent
