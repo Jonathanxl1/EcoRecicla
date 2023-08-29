@@ -1,11 +1,11 @@
 package com.example.ecorecicla.Models;
 
+
 import java.util.ArrayList;
 
 public class EstadisticaModel {
 
-    private int primaryKey;
-
+    private int userIdRef;
 
 
     private ArrayList <Double> promedioProductos = new ArrayList<>();
@@ -18,12 +18,12 @@ public class EstadisticaModel {
 
 
     public EstadisticaModel(int primaryKey) {
-        this.primaryKey = primaryKey;
+        this.userIdRef = primaryKey;
     }
 
 
     public int getPrimaryKey() {
-        return primaryKey;
+        return userIdRef;
     }
 
     public ArrayList<ProductoReciclajeModel> getArrProductosReciclados() {
