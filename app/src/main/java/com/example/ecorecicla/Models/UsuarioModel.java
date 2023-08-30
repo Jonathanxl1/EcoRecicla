@@ -1,26 +1,23 @@
 package com.example.ecorecicla.Models;
 
 
-import android.util.JsonWriter;
+import android.content.Context;
 
-import androidx.annotation.NonNull;
-
+import com.example.ecorecicla.Controllers.DataAdministrator;
 import com.google.gson.Gson;
-
-import org.json.JSONObject;
-
-import java.io.IOException;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 
 public class UsuarioModel {
 
+    @Expose private Integer id = 0;
+    @Expose private String name;
+    @Expose private String email;
+    @Expose private String password;
 
-    private Integer id = 0;
-    private String name;
-    private String email;
-    private String password;
 
-
-    private EstadisticaModel estadisticaModel;
+   @Expose(serialize = false,deserialize = false)
+   private EstadisticaModel estadisticaModel;
 
 
     public UsuarioModel( String name, String email,String password) {
@@ -30,12 +27,14 @@ public class UsuarioModel {
         estadisticaModel = new EstadisticaModel(id);
     }
 
-    public UsuarioModel(int id, String name, String email,String password) {
+    public UsuarioModel(int id, String name, String email, String password, Context context) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         estadisticaModel = new EstadisticaModel(id);
+        DataAdministrator estadisticasAdministrador = new DataAdministrator(estadisticaModel,context);
+        estadisticasAdministrador.createEstadisticaModel();
     }
 
     public Integer getId() {
@@ -64,7 +63,7 @@ public class UsuarioModel {
     }
 
     public String getUserModelJson () {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         return (String) gson.toJson(this);
 
     }

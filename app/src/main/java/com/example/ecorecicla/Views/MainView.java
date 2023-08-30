@@ -6,9 +6,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.ecorecicla.R;
 import com.google.android.material.appbar.AppBarLayout;
@@ -37,6 +39,8 @@ public class MainView extends AppCompatActivity {
                 return false;
             }
         });
+
+
 
 
 
