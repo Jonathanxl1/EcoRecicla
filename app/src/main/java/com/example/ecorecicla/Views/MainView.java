@@ -42,10 +42,7 @@ public class MainView extends AppCompatActivity {
 
 
 
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences("dataUser",MODE_PRIVATE);
-        Integer userIdRef =  preferences.getInt("userIdRef",-1);
 
-        Toast.makeText(this,userIdRef.toString(),Toast.LENGTH_LONG).show();
 
         bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
