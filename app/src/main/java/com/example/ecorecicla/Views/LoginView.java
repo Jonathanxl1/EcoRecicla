@@ -3,6 +3,7 @@ package com.example.ecorecicla.Views;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,13 +39,18 @@ public class LoginView extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Boolean validateLogin = dataAdministrator.validateLoginUser(email,password);
-                if(validateLogin){
+                Integer validateLogin = dataAdministrator.validateLoginUser(email,password);
+                if(validateLogin > -1){
                     Intent mainPage = new Intent(getBaseContext(), MainView.class);
+                    //mainPage.putExtra("USER_ID_REF",validateLogin);
+                    SharedPreferences preferences = getApplicationContext().getSharedPreferences("dataUser",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt("userIdRef",validateLogin);
+                    editor.commit();
                     startActivity(mainPage);
                     finish();
                 }else{
-                    Toast.makeText(getApplicationContext(),"Invalid Session, check user and/or password",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Invalid Log In, check User and/or Password",Toast.LENGTH_LONG).show();
                 }
 
 

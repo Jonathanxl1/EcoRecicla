@@ -7,6 +7,8 @@ import com.example.ecorecicla.Models.EstadisticaModel;
 import com.example.ecorecicla.Models.ProductoReciclajeModel;
 import com.example.ecorecicla.Models.UsuarioModel;
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +22,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DataAdministrator {
     final private String USUARIOS_FILE = "Usuarios.json";
@@ -65,7 +68,7 @@ public class DataAdministrator {
             BufferedReader bufferReader = new BufferedReader(fileReader);
             String line = bufferReader.readLine();
             bufferReader.close();
-            if(line.length() == 0){
+            if(line == null || line.length() == 0){
                 return new JSONArray();
             }else{
                 JSONArray dataJson = new JSONArray(line);
@@ -139,23 +142,24 @@ public class DataAdministrator {
     }
 
 
-    public Boolean validateLoginUser(String email,String password){
+    public Integer validateLoginUser(String email,String password){
         try {
             JSONArray jsonArray = readData();
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.optJSONObject(i);
-                if (jsonObject != null &&
-                        jsonObject.has("email") && jsonObject.has("password") &&
-                        jsonObject.getString("email").equals(email) && jsonObject.getString("password").equals(password)) {
-                    return true;
+            if(jsonArray != null) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.optJSONObject(i);
+                    if (jsonObject != null &&
+                            jsonObject.has("email") && jsonObject.has("password") &&
+                            jsonObject.getString("email").equals(email) && jsonObject.getString("password").equals(password)) {
+                        return jsonObject.getInt("id");
+                    }
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return false;
+        return -1;
 
 
     }
@@ -185,49 +189,36 @@ public class DataAdministrator {
 
     }
 
-    public void saveProductModel(ProductoReciclajeModel productoReciclajeModel,int userIdRef){
-        try{
-            ArrayList<JSONObject> arrayItems = gson.fromJson(new FileReader(file.getAbsoluteFile()),ArrayList.class);
-            JSONObject jsonItem = new JSONObject();
-            Integer position = -1;
-            for(int i=0; i < arrayItems.size();i++){
-                jsonItem = arrayItems.get(i);
-               if(jsonItem != null && jsonItem.has("userIdRef") && jsonItem.getInt("userIdRef") == userIdRef){
-                   position = i;
-                   JSONArray jsonArray = jsonItem.getJSONArray("arrProductosReciclados");
-                   jsonArray.put(gson.toJson(productoReciclajeModel));
-                   jsonItem.put("arrProductosReciclados",jsonArray);
-               }
-            }
-            if(position > -1){
-                arrayItems.add(position,jsonItem);
-            }
-            BufferedWriter bufferedWriter = writeOnFile();
-            bufferedWriter.write(gson.toJson(arrayItems));
+    public void saveProductModel(ProductoReciclajeModel productoReciclajeModel, int userIdRef) {
+        try {
+            TypeToken<EstadisticaModel[]> typeToken = new TypeToken<EstadisticaModel[]>() {};
+            EstadisticaModel[] estadisticaModels = gson.fromJson(new FileReader(file.getAbsoluteFile()), typeToken);
+            EstadisticaModel estadisticaModelSelected = estadisticaModels[userIdRef];
+            estadisticaModelSelected.setArrProductosReciclados(productoReciclajeModel);
+            String dataJson = gson.toJson(estadisticaModels);
+            bufferedWriter = writeOnFile();
+            bufferedWriter.write(dataJson);
             bufferedWriter.close();
 
-
-           /* JSONArray jsonArray = readData();
-            JSONObject jsonObject = new JSONObject();
-            if(jsonArray != null){
-                for (int i=0; i < jsonArray.length();i++){
-                    JSONObject jsonObjectTemp = jsonArray.getJSONObject(i);
-                    if(jsonObjectTemp != null && jsonObjectTemp.has("userIdRef") && jsonObjectTemp.getInt("userIdRef") == userIdRef){
-                        jsonObject = jsonObjectTemp;
-                    }
+          /*  for (int i = 0; i < arrayItems.size(); i++) {
+                LinkedTreeMap<String, Object> jsonItem = arrayItems.get(i);
+                if (jsonItem != null && jsonItem.containsKey("userIdRef") && jsonItem.get("userIdRef").equals(userIdRef)) {
+                    ArrayList<String> jsonArray = (ArrayList<String>) jsonItem.get("arrProductosReciclados");
+                    jsonArray.add(gson.toJson(productoReciclajeModel));
+                    jsonItem.put("arrProductosReciclados", jsonArray);
                 }
             }
-            ArrayList<ProductoReciclajeModel> productosReciclados = (ArrayList) jsonObject.get("arrProductosReciclados");
-            productosReciclados.add(productoReciclajeModel);
-            BufferedWriter bufferedWriter = writeOnFile();*/
 
-        }catch (FileNotFoundException e){
+            BufferedWriter bufferedWriter = writeOnFile();
+            bufferedWriter.write(gson.toJson(arrayItems));
+            bufferedWriter.close();*/
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }catch (JSONException e){
-            e.printStackTrace();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 
 }

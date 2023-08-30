@@ -15,10 +15,6 @@ public class UsuarioModel {
     @Expose private String email;
     @Expose private String password;
 
-    private Integer id = 0;
-    private String name;
-    private String email;
-    private String password;
 
    @Expose(serialize = false,deserialize = false)
    private EstadisticaModel estadisticaModel;

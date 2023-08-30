@@ -83,7 +83,7 @@ public class RegisterView extends AppCompatActivity {
 
 
     private Boolean registerUser(int id,String name,String email,String password){
-             usuarioModel = new UsuarioModel(id,name,email,password);
+             usuarioModel = new UsuarioModel(id,name,email,password,getApplicationContext());
              return usuarioModel.validateUserModel();
     }
 }

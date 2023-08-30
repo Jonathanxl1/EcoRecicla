@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 
 import com.example.ecorecicla.Constants.TypeProductsConstants;
+import com.example.ecorecicla.Controllers.DataAdministrator;
 import com.example.ecorecicla.Models.EstadisticaModel;
 import com.example.ecorecicla.Models.ProductoReciclajeModel;
 import com.example.ecorecicla.R;
@@ -62,6 +64,10 @@ public class RegisterProductsView extends AppCompatActivity {
 
     private int positionItem;
 
+    SharedPreferences preferences;
+    Integer userIdRef;
+
+    DataAdministrator estadisticasAdministrador ;
 
 
     @Override
@@ -115,13 +121,9 @@ public class RegisterProductsView extends AppCompatActivity {
                 Double cantidad = Double.parseDouble(txtCantidad.getText().toString());
                 productoReciclajeModel = new ProductoReciclajeModel(TypeProductsConstants.values()[positionItem],cantidad, localDate);
 
+                estadisticasAdministrador.saveProductModel(productoReciclajeModel,userIdRef);
+                resetFields();
 
-                estadisticaModel.setArrProductosReciclados(productoReciclajeModel);
-
-                Toast.makeText(getApplicationContext(),String.valueOf(estadisticaModel.getPromedioProductos()),Toast.LENGTH_LONG).show();
-
-                /*Intent paginaPrincipal = new Intent(getApplicationContext(), MainView.class);
-                startActivity(paginaPrincipal);*/
             }
         });
 
@@ -155,11 +157,23 @@ public class RegisterProductsView extends AppCompatActivity {
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
 
+        estadisticasAdministrador = new DataAdministrator(estadisticaModel,getApplicationContext());
+
+        preferences = getApplicationContext().getSharedPreferences("dataUser",MODE_PRIVATE);
+        userIdRef = preferences.getInt("userIdRef",-1);
+
         selectProducto = findViewById(R.id.selectProduct);
         selectDate = findViewById(R.id.selectDate);
         txtCantidad = findViewById(R.id.quantity);
         btnRegistrarProducto = findViewById(R.id.btnRegistrarProducto);
         bottomAppBar = findViewById(R.id.bottomAppBar);
+        txtCantidad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtCantidad.setFocusable(true);
+            }
+        });
+
 
         tipoProductos = new ArrayList<>();
         tipoProductos.addAll(Arrays.asList(TypeProductsConstants.values()));
@@ -214,5 +228,15 @@ public class RegisterProductsView extends AppCompatActivity {
         }, year, month, day);
 
         dialog.show();
+    }
+
+    private void resetFields(){
+        selectDate.setText(null);
+        txtCantidad.setText(null);
+        selectProducto.setText(null);
+
+        txtCantidad.clearFocus();
+
+
     }
 }
