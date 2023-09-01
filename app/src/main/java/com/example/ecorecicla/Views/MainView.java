@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
+
+import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,7 +34,7 @@ public class MainView extends AppCompatActivity {
     private TextView txvConsejos;
 
     private Integer positionConsejo = 0;
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
     private JsonArray jsonArray;
 
 
@@ -72,11 +75,15 @@ public class MainView extends AppCompatActivity {
     }
 
     private void setConsejosView() {
-        InputStream inputStream = getResources().openRawResource(R.raw.consejos);
+        try {
+            InputStream inputStream = getResources().openRawResource(R.raw.consejos);
 
-        String jsonContent = readJsonFromInputStream(inputStream);
+            String jsonContent = readJsonFromInputStream(inputStream);
 
-        jsonArray = gson.fromJson(jsonContent, JsonArray.class);
+            jsonArray = gson.fromJson(jsonContent, JsonArray.class);
+        }catch (Resources.NotFoundException e){
+            e.printStackTrace();
+        }
     }
 
     private void init() {
