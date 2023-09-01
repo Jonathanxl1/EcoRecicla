@@ -1,5 +1,15 @@
 package com.example.ecorecicla.Views;
 
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Cartesian;
+import com.anychart.core.cartesian.series.Column;
+import com.anychart.enums.Anchor;
+import com.anychart.enums.HoverMode;
+import com.anychart.enums.Position;
+import com.anychart.enums.TooltipPositionMode;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -24,18 +34,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainView extends AppCompatActivity {
     private FloatingActionButton addProduct;
     private BottomAppBar bottomAppBar;
     private Toolbar topBar;
 
-    private Button btnRightConsejo,btnLeftConsejo;
+    private Button btnRightConsejo,btnLeftConsejo, btnDetallesEstadisticas;
     private TextView txvConsejos;
 
     private Integer positionConsejo = 0;
     private final Gson gson = new Gson();
     private JsonArray jsonArray;
+
+    private AnyChartView chartAll;
 
 
     @Override
@@ -43,11 +57,56 @@ public class MainView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_view);
         init();
+        chartAll = findViewById(R.id.chartAll);
+        Cartesian cartesian = AnyChart.column();
+
+        List<DataEntry> data = new ArrayList<>();
+        data.add(new ValueDataEntry("Agua", 100));
+        data.add(new ValueDataEntry("Energia", 200));
+        data.add(new ValueDataEntry("Plastico", 300));
+        data.add(new ValueDataEntry("Papel", 400));
+
+
+        Column column = cartesian.column(data);
+
+        column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0d)
+                .offsetY(5d)
+                .format("${%Value}{groupsSeparator: }");
+
+        cartesian.animation(true);
+        cartesian.title("Productos registrados total");
+
+        cartesian.yScale().minimum(0d);
+
+        cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+
+        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
+        cartesian.interactivity().hoverMode(HoverMode.BY_X);
+
+        cartesian.xAxis(0).title("Elementos");
+        cartesian.yAxis(0).title("Cantidad");
+
+        chartAll.setChart(cartesian);
+
+
+
         bottomBarConfig();
 
         setConsejosView();
 
         setRandomConsejo();
+
+        btnDetallesEstadisticas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent detailEstadistics = new Intent(getApplicationContext(), EstadisticasAllView.class);
+                startActivity(detailEstadistics);
+            }
+        });
 
         btnRightConsejo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +152,7 @@ public class MainView extends AppCompatActivity {
         btnLeftConsejo = findViewById(R.id.leftConsejo);
         btnRightConsejo = findViewById(R.id.rightConsejo);
         txvConsejos = findViewById(R.id.txvConsejos);
+        btnDetallesEstadisticas = findViewById(R.id.detailEstadistics);
     }
     private void bottomBarConfig() {
         topBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {

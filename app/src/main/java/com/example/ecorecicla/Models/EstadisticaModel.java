@@ -30,20 +30,7 @@ public class EstadisticaModel {
         return arrProductosReciclados;
     }
 
-    public Double getPromedioProductos() {
-        int counter = 0;
-        Double quantityPromedio = 0.0;
-        for(ProductoReciclajeModel producto : arrProductosReciclados){
-            counter++;
-            quantityPromedio += producto.getQuantity().doubleValue();
-        }
-        if(counter != 0.0){
-            return quantityPromedio/ (double) counter;
-        }
 
-        return 0.0;
-
-    }
 
     public void setArrProductosReciclados(ProductoReciclajeModel productosReciclados) {
         this.arrProductosReciclados.add(productosReciclados);

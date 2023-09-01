@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Toast;
 
 
@@ -28,7 +26,6 @@ import com.example.ecorecicla.Models.ProductoReciclajeModel;
 import com.example.ecorecicla.R;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -123,6 +120,8 @@ public class RegisterProductsView extends AppCompatActivity {
 
                 estadisticasAdministrador.saveProductModel(productoReciclajeModel,userIdRef);
                 resetFields();
+
+                Toast.makeText(getApplicationContext(),"Product saved successfully", Toast.LENGTH_LONG).show();
 
             }
         });

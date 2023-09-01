@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Views.EstadisticasAllView">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/menu_other_options"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            />
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/buttonColor"
+        app:navigationIcon="@drawable/news_vector"
+        style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface"
+        app:menu="@menu/menu_main"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/baseline_add_24"
+        app:layout_anchor="@id/bottomAppBar"
+        android:id="@+id/addProduct"
+
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--<FrameLayout
+            android:background="@color/white"
+            android:elevation="8dp"
+            android:layout_width="400dp"
+            android:layout_height="200dp"
+            >
+
+        </FrameLayout>-->
+        <LinearLayout
+            android:elevation="10dp"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginVertical="100dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/tipoMes">
+
+                <AutoCompleteTextView
+                    android:id="@+id/selectProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.anychart.AnyChartView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content">
+            </com.anychart.AnyChartView>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

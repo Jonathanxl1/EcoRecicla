@@ -7,7 +7,6 @@ import com.example.ecorecicla.Models.EstadisticaModel;
 import com.example.ecorecicla.Models.ProductoReciclajeModel;
 import com.example.ecorecicla.Models.UsuarioModel;
 import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
@@ -21,8 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DataAdministrator {
     final private String USUARIOS_FILE = "Usuarios.json";
@@ -31,6 +28,8 @@ public class DataAdministrator {
     private BufferedWriter bufferedWriter;
     private UsuarioModel userModel;
     private EstadisticaModel estadisticaModel;
+    
+    private TypeToken<EstadisticaModel[]> typeEstadisticas = new TypeToken<EstadisticaModel[]>() {};
 
     private Gson gson;
 
@@ -191,8 +190,8 @@ public class DataAdministrator {
 
     public void saveProductModel(ProductoReciclajeModel productoReciclajeModel, int userIdRef) {
         try {
-            TypeToken<EstadisticaModel[]> typeToken = new TypeToken<EstadisticaModel[]>() {};
-            EstadisticaModel[] estadisticaModels = gson.fromJson(new FileReader(file.getAbsoluteFile()), typeToken);
+
+            EstadisticaModel[] estadisticaModels = getEstadisticaModels();
             EstadisticaModel estadisticaModelSelected = estadisticaModels[userIdRef];
             estadisticaModelSelected.setArrProductosReciclados(productoReciclajeModel);
             String dataJson = gson.toJson(estadisticaModels);
@@ -200,23 +199,21 @@ public class DataAdministrator {
             bufferedWriter.write(dataJson);
             bufferedWriter.close();
 
-          /*  for (int i = 0; i < arrayItems.size(); i++) {
-                LinkedTreeMap<String, Object> jsonItem = arrayItems.get(i);
-                if (jsonItem != null && jsonItem.containsKey("userIdRef") && jsonItem.get("userIdRef").equals(userIdRef)) {
-                    ArrayList<String> jsonArray = (ArrayList<String>) jsonItem.get("arrProductosReciclados");
-                    jsonArray.add(gson.toJson(productoReciclajeModel));
-                    jsonItem.put("arrProductosReciclados", jsonArray);
-                }
-            }
 
-            BufferedWriter bufferedWriter = writeOnFile();
-            bufferedWriter.write(gson.toJson(arrayItems));
-            bufferedWriter.close();*/
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private EstadisticaModel[] getEstadisticaModels() throws FileNotFoundException {
+        EstadisticaModel[] estadisticaModels = gson.fromJson(new FileReader(file.getAbsoluteFile()), typeEstadisticas);
+        return estadisticaModels;
+    }
+
+    public EstadisticaModel getEstadisticaModel (int userIdRef) throws  FileNotFoundException{
+        return getEstadisticaModels()[userIdRef];
     }
 
 
