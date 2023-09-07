@@ -217,7 +217,7 @@ public class RegisterProductsView extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 LocalDate df = LocalDate.of(year,month,dayOfMonth);
 
-                setDate(df,year,month,dayOfMonth);
+                setDate(df,year,month+1,dayOfMonth);
 
                 LocalDate dfText = LocalDate.of(year,month+1,dayOfMonth);
 

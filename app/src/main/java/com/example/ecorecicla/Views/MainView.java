@@ -10,17 +10,24 @@ import com.anychart.enums.Anchor;
 import com.anychart.enums.HoverMode;
 import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.ecorecicla.Constants.TypeProductsConstants;
+import com.example.ecorecicla.Controllers.DataAdministrator;
+import com.example.ecorecicla.Models.EstadisticaModel;
 import com.example.ecorecicla.R;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,9 +35,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
 
-import org.json.JSONArray;
-
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -51,47 +57,26 @@ public class MainView extends AppCompatActivity {
 
     private AnyChartView chartAll;
 
+    SharedPreferences preferences;
+
+    private Integer userIdRef;
+
+    private EstadisticaModel estadisticaModel;
+
+    private DataAdministrator dataAdministrator;
+
+    private TypeProductsConstants constAgua, constEnergia, constPapel, constPlastico;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_view);
         init();
-        chartAll = findViewById(R.id.chartAll);
-        Cartesian cartesian = AnyChart.column();
 
-        List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("Agua", 100));
-        data.add(new ValueDataEntry("Energia", 200));
-        data.add(new ValueDataEntry("Plastico", 300));
-        data.add(new ValueDataEntry("Papel", 400));
-
-
-        Column column = cartesian.column(data);
-
-        column.tooltip()
-                .titleFormat("{%X}")
-                .position(Position.CENTER_BOTTOM)
-                .anchor(Anchor.CENTER_BOTTOM)
-                .offsetX(0d)
-                .offsetY(5d)
-                .format("${%Value}{groupsSeparator: }");
-
-        cartesian.animation(true);
-        cartesian.title("Productos registrados total");
-
-        cartesian.yScale().minimum(0d);
-
-        cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
-
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
-        cartesian.interactivity().hoverMode(HoverMode.BY_X);
-
-        cartesian.xAxis(0).title("Elementos");
-        cartesian.yAxis(0).title("Cantidad");
-
-        chartAll.setChart(cartesian);
-
+        setChartAllProductsRecycled();
 
 
         bottomBarConfig();
@@ -133,6 +118,42 @@ public class MainView extends AppCompatActivity {
 
     }
 
+    private void setChartAllProductsRecycled() {
+        Cartesian cartesian = AnyChart.column();
+
+        List<DataEntry> data = new ArrayList<>();
+        data.add(new ValueDataEntry(constAgua.getTypeProducto(),getTotalProductsByType(constAgua) ));
+        data.add(new ValueDataEntry(constPapel.getTypeProducto(), getTotalProductsByType(constPapel)));
+        data.add(new ValueDataEntry(constEnergia.getTypeProducto(), getTotalProductsByType(constEnergia)));
+        data.add(new ValueDataEntry(constPlastico.getTypeProducto(), getTotalProductsByType(constPlastico)));
+
+
+        Column column = cartesian.column(data);
+
+        column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0d)
+                .offsetY(5d)
+                .format("{%Value}{groupsSeparator: }");
+
+        cartesian.animation(true);
+        cartesian.title("Productos registrados total");
+
+        cartesian.yScale().minimum(0d);
+
+        cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
+
+        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
+        cartesian.interactivity().hoverMode(HoverMode.BY_X);
+
+        cartesian.xAxis(0).title("Elementos");
+        cartesian.yAxis(0).title("Cantidad");
+
+        chartAll.setChart(cartesian);
+    }
+
     private void setConsejosView() {
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.consejos);
@@ -145,6 +166,8 @@ public class MainView extends AppCompatActivity {
         }
     }
 
+    
+
     private void init() {
         addProduct = findViewById(R.id.addProduct);
         bottomAppBar = findViewById(R.id.bottomAppBar);
@@ -153,6 +176,19 @@ public class MainView extends AppCompatActivity {
         btnRightConsejo = findViewById(R.id.rightConsejo);
         txvConsejos = findViewById(R.id.txvConsejos);
         btnDetallesEstadisticas = findViewById(R.id.detailEstadistics);
+        chartAll = findViewById(R.id.chartAll);
+        chartAll.setProgressBar(findViewById(R.id.progressBar));
+
+        preferences = getApplicationContext().getSharedPreferences("dataUser",MODE_PRIVATE);
+        userIdRef = preferences.getInt("userIdRef",-1);
+
+        dataAdministrator = new DataAdministrator(estadisticaModel,getApplicationContext());
+
+        constAgua = TypeProductsConstants.AGUA;
+        constPapel = TypeProductsConstants.PAPEL;
+        constPlastico = TypeProductsConstants.PLASTICO;
+        constEnergia = TypeProductsConstants.ENERGIA;
+
     }
     private void bottomBarConfig() {
         topBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -230,6 +266,14 @@ public class MainView extends AppCompatActivity {
     private void setRandomConsejo() {
         positionConsejo = (int) Math.round(Math.random() * (jsonArray.size() - 1));
         setConsejoByPosition(positionConsejo);
+    }
+
+    private Double getTotalProductsByType(TypeProductsConstants typeProductsConstants){
+        try {
+            return dataAdministrator.getEstadisticaModel(userIdRef).getMapTotalProductsByType().get(typeProductsConstants);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
