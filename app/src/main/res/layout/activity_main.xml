@@ -39,7 +39,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:srcCompat="@drawable/recycle_g1a25d1a79_1280" />
+            app:srcCompat="@drawable/ecorecicla" />
     </LinearLayout>
 
 
