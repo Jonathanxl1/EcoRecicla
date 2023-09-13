@@ -16,30 +16,11 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/menu_other_options"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             />
 
     </com.google.android.material.appbar.AppBarLayout>
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:backgroundTint="@color/buttonColor"
-        app:navigationIcon="@drawable/news_vector"
-        style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface"
-        app:menu="@menu/menu_main"
-        />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/baseline_add_24"
-        app:layout_anchor="@id/bottomAppBar"
-        android:id="@+id/addProduct"
-
-        />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -17,6 +17,16 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/login"
+            android:textAlignment="center"
+            android:textSize="50sp" />
+
         <LinearLayout
             android:elevation="10dp"
             android:background="@color/white"
@@ -34,10 +44,11 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/emailUser"
-                    />
+                    android:maxLength="30"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -48,13 +59,13 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:id="@+id/passwordUser"
                     android:drawableRight="@drawable/arrow_back"
+                    android:inputType="textPassword"
 
-                    />
+                    android:maxLength="30" />
 
             </com.google.android.material.textfield.TextInputLayout>
             <LinearLayout
@@ -91,5 +102,6 @@
 
 
         </LinearLayout>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
